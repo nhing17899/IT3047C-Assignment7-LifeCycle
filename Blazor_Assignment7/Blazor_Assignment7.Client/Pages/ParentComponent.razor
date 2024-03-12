@@ -1,0 +1,29 @@
+﻿@page "/parent-component"
+
+<PageTitle>Parent Component</PageTitle>
+
+<h1>Parent Component</h1>
+
+<p>Length Conversion</p>
+
+<ChildComponent
+    LengthFoot="3.28084"
+    LengthM="1"
+    OnUnitChanged="HandleUnitChanged"
+/>
+
+<FluentLabel>
+    @foreach(var unit in unitList)
+    {
+        <div>@unit</div>
+    }
+</FluentLabel>
+@code {
+    private List<string> unitList = new List<string>();
+
+    private void HandleUnitChanged(string unit)
+    {
+        unitList.Add($"Unit changed to {unit}");
+        StateHasChanged();
+    }
+}

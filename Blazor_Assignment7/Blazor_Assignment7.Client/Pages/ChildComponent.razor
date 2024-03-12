@@ -1,0 +1,59 @@
+﻿<PageTitle>Child Component</PageTitle>
+
+<h3>Child Component</h3>
+
+<FluentCard Height="Auto" Width="Auto">
+    <FluentStack Orientation="Orientation.Vertical">
+        <FluentStack Orientation="Orientation.Horizontal">
+            <FluentRadioGroup @bind-Value="Unit" @onchange="UnitChanged">
+                <FluentRadio Value="@("meters")">Meters</FluentRadio>
+                <FluentRadio Value="@("feet")">Feet</FluentRadio>
+            </FluentRadioGroup>
+
+            @if (Unit == "meters")
+            {
+                <input id="meter" type="number" @bind="LengthM" />
+            }
+            else
+            {
+                <input id="foot" type="number" @bind="LengthFoot" />
+            }
+        </FluentStack>
+
+        @if(Unit == "meters")
+        {
+            <button @onclick="ConvertToFoot">Convert To Feet</button>
+        }
+        else
+        {
+            <button @onclick="ConvertToM">Convert To Meters</button>
+        }
+        
+        <div>
+            @LengthFoot <b>Feet</b> is equal to @LengthM <b>Meters</b>.
+        </div>
+    </FluentStack>
+</FluentCard>
+
+@code {
+    [Parameter]
+    public double LengthM { get; set; }
+    [Parameter]
+    public double LengthFoot { get; set; }
+    [Parameter]
+    public EventCallback<string> OnUnitChanged { get; set; }
+
+    private string Unit { get; set; } = "meters";
+    private void UnitChanged(ChangeEventArgs args)
+    {
+        OnUnitChanged.InvokeAsync(args.Value.ToString());   
+    }
+    private void ConvertToFoot()
+    {
+        LengthFoot = LengthM * 3.28084;
+    }
+    private void ConvertToM()
+    {
+        LengthM = LengthFoot * 0.3048;
+    }
+}
